@@ -1,0 +1,1140 @@
+{
+ "Resources": {
+  "CustomResourceHandlerServiceRole41AEC181": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "notes"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "biruk"
+     }
+    ]
+   }
+  },
+  "CustomResourceHandlerE8FB56BA": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368794553105-us-east-1",
+     "S3Key": "2082819948ee0f3ece87f147d77a6ef8e64213594e5b157cffebf2b86a564667.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomResourceHandlerServiceRole41AEC181",
+      "Arn"
+     ]
+    },
+    "Handler": "index.handler",
+    "MemorySize": 1024,
+    "Runtime": "nodejs16.x",
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "notes"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "biruk"
+     }
+    ],
+    "Timeout": 900
+   },
+   "DependsOn": [
+    "CustomResourceHandlerServiceRole41AEC181"
+   ]
+  },
+  "busEventBus27CE599B": {
+   "Type": "AWS::Events::EventBus",
+   "Properties": {
+    "Name": "biruk-notes-bus"
+   }
+  },
+  "busRetrierQueue89364BB5": {
+   "Type": "AWS::SQS::Queue",
+   "Properties": {
+    "QueueName": "biruk-notes-busRetrier",
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "notes"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "biruk"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
+  },
+  "busRetrierFunctionServiceRoleCE8B64C2": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "notes"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "biruk"
+     }
+    ]
+   }
+  },
+  "busRetrierFunctionServiceRoleDefaultPolicy1868A7F6": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "sqs:ReceiveMessage",
+        "sqs:ChangeMessageVisibility",
+        "sqs:GetQueueUrl",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "busRetrierQueue89364BB5",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "sqs:SendMessage",
+        "sqs:GetQueueAttributes",
+        "sqs:GetQueueUrl"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "busRetrierQueue89364BB5",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "bustodocreated1F82766D3",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "bustodocreated1F82766D3",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "busRetrierFunctionServiceRoleDefaultPolicy1868A7F6",
+    "Roles": [
+     {
+      "Ref": "busRetrierFunctionServiceRoleCE8B64C2"
+     }
+    ]
+   }
+  },
+  "busRetrierFunctionA625372F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368794553105-us-east-1",
+     "S3Key": "c630aa677a71194e5cba3df5e2f77b70db5aa8c727318d1f6b014bda981e35b3.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "busRetrierFunctionServiceRoleCE8B64C2",
+      "Arn"
+     ]
+    },
+    "Environment": {
+     "Variables": {
+      "RETRIER_QUEUE_URL": {
+       "Ref": "busRetrierQueue89364BB5"
+      },
+      "RETRIES": {
+       "Fn::Join": [
+        "",
+        [
+         "{\"",
+         {
+          "Fn::GetAtt": [
+           "bustodocreated1F82766D3",
+           "Arn"
+          ]
+         },
+         "\":10}"
+        ]
+       ]
+      }
+     }
+    },
+    "FunctionName": "biruk-notes-busRetrier",
+    "Handler": "index.handler",
+    "Runtime": "nodejs14.x",
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "notes"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "biruk"
+     }
+    ]
+   },
+   "DependsOn": [
+    "busRetrierFunctionServiceRoleDefaultPolicy1868A7F6",
+    "busRetrierFunctionServiceRoleCE8B64C2"
+   ]
+  },
+  "busRetrierFunctionSqsEventSourcebiruknotesAPIbusRetrierQueueE8CDCC380862E538": {
+   "Type": "AWS::Lambda::EventSourceMapping",
+   "Properties": {
+    "FunctionName": {
+     "Ref": "busRetrierFunctionA625372F"
+    },
+    "EventSourceArn": {
+     "Fn::GetAtt": [
+      "busRetrierQueue89364BB5",
+      "Arn"
+     ]
+    }
+   }
+  },
+  "bustodocreated1ServiceRole4C30328F": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "notes"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "biruk"
+     }
+    ]
+   }
+  },
+  "bustodocreated1ServiceRoleDefaultPolicyB19D662B": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "sqs:SendMessage",
+        "sqs:GetQueueAttributes",
+        "sqs:GetQueueUrl"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "busRetrierQueue89364BB5",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": "iot:*",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "s3:*",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":s3:::sstbootstrap-useast124d14e4b-qr43zsnjbhoq"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "bustodocreated1ServiceRoleDefaultPolicyB19D662B",
+    "Roles": [
+     {
+      "Ref": "bustodocreated1ServiceRole4C30328F"
+     }
+    ]
+   }
+  },
+  "bustodocreated1F82766D3": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368794553105-us-east-1",
+     "S3Key": "9fe9969c98dee83cbe72e215307d8491aa401ab9894e93572633e9002918d92c.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "bustodocreated1ServiceRole4C30328F",
+      "Arn"
+     ]
+    },
+    "Environment": {
+     "Variables": {
+      "SST_FUNCTION_ID": "c8136d0e060034152af5e4f8597ce5d493904f17be",
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+      "SST_APP": "notes",
+      "SST_STAGE": "biruk",
+      "SST_SSM_PREFIX": "/sst/notes/biruk/"
+     }
+    },
+    "EphemeralStorage": {
+     "Size": 512
+    },
+    "Handler": "bridge.handler",
+    "MemorySize": 1024,
+    "Runtime": "nodejs16.x",
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "notes"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "biruk"
+     }
+    ],
+    "Timeout": 10,
+    "TracingConfig": {
+     "Mode": "Active"
+    }
+   },
+   "DependsOn": [
+    "bustodocreated1ServiceRoleDefaultPolicyB19D662B",
+    "bustodocreated1ServiceRole4C30328F"
+   ]
+  },
+  "bustodocreated1EventInvokeConfig7DC57D3D": {
+   "Type": "AWS::Lambda::EventInvokeConfig",
+   "Properties": {
+    "FunctionName": {
+     "Ref": "bustodocreated1F82766D3"
+    },
+    "Qualifier": "$LATEST",
+    "DestinationConfig": {
+     "OnFailure": {
+      "Destination": {
+       "Fn::GetAtt": [
+        "busRetrierQueue89364BB5",
+        "Arn"
+       ]
+      }
+     }
+    },
+    "MaximumRetryAttempts": 0
+   }
+  },
+  "bustodocreated1rule42B5E680": {
+   "Type": "AWS::Events::Rule",
+   "Properties": {
+    "EventBusName": {
+     "Ref": "busEventBus27CE599B"
+    },
+    "EventPattern": {
+     "detail-type": [
+      "todo.created"
+     ]
+    },
+    "Name": "biruk-notes-todo_created_1_rule",
+    "State": "ENABLED",
+    "Targets": [
+     {
+      "Arn": {
+       "Fn::GetAtt": [
+        "bustodocreated1F82766D3",
+        "Arn"
+       ]
+      },
+      "Id": "Target0"
+     }
+    ]
+   }
+  },
+  "bustodocreated1ruleAllowEventRulebiruknotesAPIbustodocreated104DE6D7D55DEBBEF": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "bustodocreated1F82766D3",
+      "Arn"
+     ]
+    },
+    "Principal": "events.amazonaws.com",
+    "SourceArn": {
+     "Fn::GetAtt": [
+      "bustodocreated1rule42B5E680",
+      "Arn"
+     ]
+    }
+   }
+  },
+  "busParametereventBusNameFE245BC9": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Type": "String",
+    "Value": {
+     "Ref": "busEventBus27CE599B"
+    },
+    "Name": "/sst/notes/biruk/EventBus/bus/eventBusName",
+    "Tags": {
+     "sst:app": "notes",
+     "sst:stage": "biruk"
+    }
+   }
+  },
+  "apiApiC3C473D0": {
+   "Type": "AWS::ApiGatewayV2::Api",
+   "Properties": {
+    "CorsConfiguration": {
+     "AllowCredentials": false,
+     "AllowHeaders": [
+      "*"
+     ],
+     "AllowMethods": [
+      "*"
+     ],
+     "AllowOrigins": [
+      "*"
+     ]
+    },
+    "Name": "biruk-notes-api",
+    "ProtocolType": "HTTP",
+    "Tags": {
+     "sst:app": "notes",
+     "sst:stage": "biruk"
+    }
+   }
+  },
+  "apiApiDefaultStageA626ED4D": {
+   "Type": "AWS::ApiGatewayV2::Stage",
+   "Properties": {
+    "ApiId": {
+     "Ref": "apiApiC3C473D0"
+    },
+    "StageName": "$default",
+    "AccessLogSettings": {
+     "DestinationArn": {
+      "Fn::GetAtt": [
+       "apiLogGroup924E5B7A",
+       "Arn"
+      ]
+     },
+     "Format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"httpMethod\":\"$context.httpMethod\",\"path\":\"$context.path\",\"routeKey\":\"$context.routeKey\",\"status\":$context.status,\"responseLatency\":$context.responseLatency,\"integrationRequestId\":\"$context.integration.requestId\",\"integrationStatus\":\"$context.integration.status\",\"integrationLatency\":\"$context.integration.latency\",\"integrationServiceStatus\":\"$context.integration.integrationStatus\",\"ip\":\"$context.identity.sourceIp\",\"userAgent\":\"$context.identity.userAgent\"}"
+    },
+    "AutoDeploy": true,
+    "Tags": {
+     "sst:app": "notes",
+     "sst:stage": "biruk"
+    }
+   }
+  },
+  "apiLogGroup924E5B7A": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/vendedlogs/apis/biruk-notes-api-",
+       {
+        "Ref": "apiApiC3C473D0"
+       },
+       "/default"
+      ]
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "notes"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "biruk"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain"
+  },
+  "apiLambdaGETServiceRole57A117D1": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "notes"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "biruk"
+     }
+    ]
+   }
+  },
+  "apiLambdaGETServiceRoleDefaultPolicyE9384899": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "events:*",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "busEventBus27CE599B",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": "iot:*",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "s3:*",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":s3:::sstbootstrap-useast124d14e4b-qr43zsnjbhoq"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "apiLambdaGETServiceRoleDefaultPolicyE9384899",
+    "Roles": [
+     {
+      "Ref": "apiLambdaGETServiceRole57A117D1"
+     }
+    ]
+   }
+  },
+  "apiLambdaGET2D5CB7A7": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368794553105-us-east-1",
+     "S3Key": "9fe9969c98dee83cbe72e215307d8491aa401ab9894e93572633e9002918d92c.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "apiLambdaGETServiceRole57A117D1",
+      "Arn"
+     ]
+    },
+    "Environment": {
+     "Variables": {
+      "SST_FUNCTION_ID": "c8d29ba7e3db1c0788b3e7ffeca3d22dea502ad317",
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+      "SST_APP": "notes",
+      "SST_STAGE": "biruk",
+      "SST_SSM_PREFIX": "/sst/notes/biruk/",
+      "SST_EventBus_eventBusName_bus": {
+       "Ref": "busEventBus27CE599B"
+      },
+      "SST_DEBUG_IS_API_ROUTE": "1"
+     }
+    },
+    "EphemeralStorage": {
+     "Size": 512
+    },
+    "Handler": "bridge.handler",
+    "MemorySize": 1024,
+    "Runtime": "nodejs16.x",
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "notes"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "biruk"
+     }
+    ],
+    "Timeout": 10,
+    "TracingConfig": {
+     "Mode": "Active"
+    }
+   },
+   "DependsOn": [
+    "apiLambdaGETServiceRoleDefaultPolicyE9384899",
+    "apiLambdaGETServiceRole57A117D1"
+   ]
+  },
+  "apiLambdaGETEventInvokeConfig794FB4BC": {
+   "Type": "AWS::Lambda::EventInvokeConfig",
+   "Properties": {
+    "FunctionName": {
+     "Ref": "apiLambdaGET2D5CB7A7"
+    },
+    "Qualifier": "$LATEST",
+    "MaximumRetryAttempts": 0
+   }
+  },
+  "apiRouteGETIntegrationGET451F73F0": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "apiApiC3C473D0"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "apiLambdaGET2D5CB7A7",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   }
+  },
+  "apiRouteGETIntegrationGETPermission02100559": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "apiLambdaGET2D5CB7A7",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:us-east-1:368794553105:",
+       {
+        "Ref": "apiApiC3C473D0"
+       },
+       "/*/*/"
+      ]
+     ]
+    }
+   }
+  },
+  "apiRouteGET1A9E87AB": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "apiApiC3C473D0"
+    },
+    "RouteKey": "GET /",
+    "AuthorizationType": "NONE",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "apiRouteGETIntegrationGET451F73F0"
+       }
+      ]
+     ]
+    }
+   }
+  },
+  "apiLambdaPOSTServiceRoleA4C27F91": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "notes"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "biruk"
+     }
+    ]
+   }
+  },
+  "apiLambdaPOSTServiceRoleDefaultPolicyC111F047": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "events:*",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "busEventBus27CE599B",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": "iot:*",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "s3:*",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":s3:::sstbootstrap-useast124d14e4b-qr43zsnjbhoq"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "apiLambdaPOSTServiceRoleDefaultPolicyC111F047",
+    "Roles": [
+     {
+      "Ref": "apiLambdaPOSTServiceRoleA4C27F91"
+     }
+    ]
+   }
+  },
+  "apiLambdaPOSTAADD50C4": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368794553105-us-east-1",
+     "S3Key": "9fe9969c98dee83cbe72e215307d8491aa401ab9894e93572633e9002918d92c.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "apiLambdaPOSTServiceRoleA4C27F91",
+      "Arn"
+     ]
+    },
+    "Environment": {
+     "Variables": {
+      "SST_FUNCTION_ID": "c87f85fe7ef382deec893fa35beebbd581e5c92916",
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+      "SST_APP": "notes",
+      "SST_STAGE": "biruk",
+      "SST_SSM_PREFIX": "/sst/notes/biruk/",
+      "SST_EventBus_eventBusName_bus": {
+       "Ref": "busEventBus27CE599B"
+      },
+      "SST_DEBUG_IS_API_ROUTE": "1"
+     }
+    },
+    "EphemeralStorage": {
+     "Size": 512
+    },
+    "Handler": "bridge.handler",
+    "MemorySize": 1024,
+    "Runtime": "nodejs16.x",
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "notes"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "biruk"
+     }
+    ],
+    "Timeout": 10,
+    "TracingConfig": {
+     "Mode": "Active"
+    }
+   },
+   "DependsOn": [
+    "apiLambdaPOSTServiceRoleDefaultPolicyC111F047",
+    "apiLambdaPOSTServiceRoleA4C27F91"
+   ]
+  },
+  "apiLambdaPOSTEventInvokeConfig41B27DD2": {
+   "Type": "AWS::Lambda::EventInvokeConfig",
+   "Properties": {
+    "FunctionName": {
+     "Ref": "apiLambdaPOSTAADD50C4"
+    },
+    "Qualifier": "$LATEST",
+    "MaximumRetryAttempts": 0
+   }
+  },
+  "apiRoutePOSTIntegrationPOST2681706C": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "apiApiC3C473D0"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "apiLambdaPOSTAADD50C4",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   }
+  },
+  "apiRoutePOSTIntegrationPOSTPermissionD8E76F5B": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "apiLambdaPOSTAADD50C4",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:us-east-1:368794553105:",
+       {
+        "Ref": "apiApiC3C473D0"
+       },
+       "/*/*/"
+      ]
+     ]
+    }
+   }
+  },
+  "apiRoutePOSTCE013D5A": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "apiApiC3C473D0"
+    },
+    "RouteKey": "POST /",
+    "AuthorizationType": "NONE",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "apiRoutePOSTIntegrationPOST2681706C"
+       }
+      ]
+     ]
+    }
+   }
+  },
+  "apiParameterurl1D4D90E2": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Type": "String",
+    "Value": {
+     "Fn::GetAtt": [
+      "apiApiC3C473D0",
+      "ApiEndpoint"
+     ]
+    },
+    "Name": "/sst/notes/biruk/Api/api/url",
+    "Tags": {
+     "sst:app": "notes",
+     "sst:stage": "biruk"
+    }
+   }
+  }
+ },
+ "Outputs": {
+  "ApiEndpoint": {
+   "Value": {
+    "Fn::GetAtt": [
+     "apiApiC3C473D0",
+     "ApiEndpoint"
+    ]
+   }
+  },
+  "SSTMetadata": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "{\"app\":\"notes\",\"stage\":\"biruk\",\"version\":\"2.16.1\",\"metadata\":[{\"id\":\"bus\",\"addr\":\"c892b531fbd52f2b23c07cf13e883058e4afab266b\",\"stack\":\"biruk-notes-API\",\"type\":\"EventBus\",\"data\":{\"eventBusName\":\"",
+      {
+       "Ref": "busEventBus27CE599B"
+      },
+      "\",\"rules\":[{\"key\":\"todo_created_1_rule\",\"targets\":[{\"node\":\"c8136d0e060034152af5e4f8597ce5d493904f17be\",\"stack\":\"biruk-notes-API\"}],\"targetNames\":[\"todo_created_1_target\"]}]}},{\"id\":\"todo_created_1\",\"addr\":\"c8136d0e060034152af5e4f8597ce5d493904f17be\",\"stack\":\"biruk-notes-API\",\"type\":\"Function\",\"data\":{\"arn\":\"",
+      {
+       "Fn::GetAtt": [
+        "bustodocreated1F82766D3",
+        "Arn"
+       ]
+      },
+      "\",\"handler\":\"packages/functions/src/events/todo-created.handler\",\"localId\":\"c8136d0e060034152af5e4f8597ce5d493904f17be\",\"secrets\":[]}},{\"id\":\"api\",\"addr\":\"c88b887e2c53d23354586935e0a73bc41a5f2bbbe7\",\"stack\":\"biruk-notes-API\",\"type\":\"Api\",\"data\":{\"graphql\":false,\"url\":\"https://",
+      {
+       "Ref": "apiApiC3C473D0"
+      },
+      ".execute-api.us-east-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/\",\"httpApiId\":\"",
+      {
+       "Ref": "apiApiC3C473D0"
+      },
+      "\",\"routes\":[{\"type\":\"function\",\"route\":\"GET /\",\"fn\":{\"node\":\"c8d29ba7e3db1c0788b3e7ffeca3d22dea502ad317\",\"stack\":\"biruk-notes-API\"}},{\"type\":\"function\",\"route\":\"POST /\",\"fn\":{\"node\":\"c87f85fe7ef382deec893fa35beebbd581e5c92916\",\"stack\":\"biruk-notes-API\"}}]}},{\"id\":\"Lambda_GET_--\",\"addr\":\"c8d29ba7e3db1c0788b3e7ffeca3d22dea502ad317\",\"stack\":\"biruk-notes-API\",\"type\":\"Function\",\"data\":{\"arn\":\"",
+      {
+       "Fn::GetAtt": [
+        "apiLambdaGET2D5CB7A7",
+        "Arn"
+       ]
+      },
+      "\",\"handler\":\"packages/functions/src/todo.list\",\"localId\":\"c8d29ba7e3db1c0788b3e7ffeca3d22dea502ad317\",\"secrets\":[]}},{\"id\":\"Lambda_POST_--\",\"addr\":\"c87f85fe7ef382deec893fa35beebbd581e5c92916\",\"stack\":\"biruk-notes-API\",\"type\":\"Function\",\"data\":{\"arn\":\"",
+      {
+       "Fn::GetAtt": [
+        "apiLambdaPOSTAADD50C4",
+        "Arn"
+       ]
+      },
+      "\",\"handler\":\"packages/functions/src/todo.create\",\"localId\":\"c87f85fe7ef382deec893fa35beebbd581e5c92916\",\"secrets\":[]}}]}"
+     ]
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

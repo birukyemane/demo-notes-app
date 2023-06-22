@@ -1088,3 +1088,5 @@ CDKToolkit | 12/12 | 7:56:04 PM | CREATE_COMPLETE      | AWS::CloudFormation::
 2023-06-22T01:12:32.094Z     +1ms [debug] Worker 51e94b8c9df30fed045016cfb38f5660 is waiting for next invocation
 2023-06-22T01:12:32.198Z   +104ms [debug] IOT Published /sst/notes/biruk/events/51e94b8c9df30fed045016cfb38f5660 function.success
 2023-06-22T01:27:32.199Z +900001ms [debug] Publishing event {"type":"worker.exited","properties":{"workerID":"51e94b8c9df30fed045016cfb38f5660","functionID":"c8d29ba7e3db1c0788b3e7ffeca3d22dea502ad317"},"sourceID":"3398e825f0fd080e7d7c80c663c308f5"}
+2023-06-22T01:53:00.278Z +1528079ms [debug] Publishing event {"type":"file.changed","properties":{"file":"/home/biruk/code/notes/.gitignore","relative":".gitignore"},"sourceID":"3398e825f0fd080e7d7c80c663c308f5"}
+2023-06-22T01:53:12.717Z +12439ms [debug] Publishing event {"type":"file.changed","properties":{"file":"/home/biruk/code/notes/.gitignore","relative":".gitignore"},"sourceID":"3398e825f0fd080e7d7c80c663c308f5"}

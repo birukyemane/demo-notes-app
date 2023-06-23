@@ -4,18 +4,18 @@ declare module "sst/node/config" {
     APP: string;
     STAGE: string;
   }
-}import "sst/node/event-bus";
-declare module "sst/node/event-bus" {
-  export interface EventBusResources {
-    "bus": {
-      eventBusName: string;
+}import "sst/node/bucket";
+declare module "sst/node/bucket" {
+  export interface BucketResources {
+    "Uploads": {
+      bucketName: string;
     }
   }
-}import "sst/node/api";
-declare module "sst/node/api" {
-  export interface ApiResources {
-    "api": {
-      url: string;
+}import "sst/node/table";
+declare module "sst/node/table" {
+  export interface TableResources {
+    "Notes": {
+      tableName: string;
     }
   }
 }

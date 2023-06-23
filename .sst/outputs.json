@@ -1,5 +1,3 @@
 {
-  "biruk-notes-API": {
-    "ApiEndpoint": "https://d3itmm9myb.execute-api.us-east-1.amazonaws.com"
-  }
+  "biruk-notes-StorageStack": {}
 }

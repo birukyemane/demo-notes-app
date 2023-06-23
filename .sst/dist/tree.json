@@ -4,21 +4,21 @@
     "id": "App",
     "path": "",
     "children": {
-      "biruk-notes-API": {
-        "id": "biruk-notes-API",
-        "path": "biruk-notes-API",
+      "biruk-notes-StorageStack": {
+        "id": "biruk-notes-StorageStack",
+        "path": "biruk-notes-StorageStack",
         "children": {
           "CustomResourceHandler": {
             "id": "CustomResourceHandler",
-            "path": "biruk-notes-API/CustomResourceHandler",
+            "path": "biruk-notes-StorageStack/CustomResourceHandler",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "biruk-notes-API/CustomResourceHandler/ServiceRole",
+                "path": "biruk-notes-StorageStack/CustomResourceHandler/ServiceRole",
                 "children": {
                   "ImportServiceRole": {
                     "id": "ImportServiceRole",
-                    "path": "biruk-notes-API/CustomResourceHandler/ServiceRole/ImportServiceRole",
+                    "path": "biruk-notes-StorageStack/CustomResourceHandler/ServiceRole/ImportServiceRole",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.Resource",
                       "version": "2.84.0"
@@ -26,7 +26,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "biruk-notes-API/CustomResourceHandler/ServiceRole/Resource",
+                    "path": "biruk-notes-StorageStack/CustomResourceHandler/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -81,11 +81,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "biruk-notes-API/CustomResourceHandler/Code",
+                "path": "biruk-notes-StorageStack/CustomResourceHandler/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "biruk-notes-API/CustomResourceHandler/Code/Stage",
+                    "path": "biruk-notes-StorageStack/CustomResourceHandler/Code/Stage",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.AssetStaging",
                       "version": "2.84.0"
@@ -93,7 +93,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "biruk-notes-API/CustomResourceHandler/Code/AssetBucket",
+                    "path": "biruk-notes-StorageStack/CustomResourceHandler/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_s3.BucketBase",
                       "version": "2.84.0"
@@ -107,13 +107,13 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "biruk-notes-API/CustomResourceHandler/Resource",
+                "path": "biruk-notes-StorageStack/CustomResourceHandler/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
                     "code": {
                       "s3Bucket": "cdk-hnb659fds-assets-368794553105-us-east-1",
-                      "s3Key": "2082819948ee0f3ece87f147d77a6ef8e64213594e5b157cffebf2b86a564667.zip"
+                      "s3Key": "a4dcf6e40278dd71cbb0fe10fd9c119e281c0ffbba209442e8b315572857df9f.zip"
                     },
                     "role": {
                       "Fn::GetAtt": [
@@ -148,837 +148,49 @@
               "version": "2.84.0"
             }
           },
-          "bus": {
-            "id": "bus",
-            "path": "biruk-notes-API/bus",
+          "Uploads": {
+            "id": "Uploads",
+            "path": "biruk-notes-StorageStack/Uploads",
             "children": {
-              "EventBus": {
-                "id": "EventBus",
-                "path": "biruk-notes-API/bus/EventBus",
+              "Bucket": {
+                "id": "Bucket",
+                "path": "biruk-notes-StorageStack/Uploads/Bucket",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "biruk-notes-API/bus/EventBus/Resource",
+                    "path": "biruk-notes-StorageStack/Uploads/Bucket/Resource",
                     "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::Events::EventBus",
-                      "aws:cdk:cloudformation:props": {
-                        "name": "biruk-notes-bus"
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_events.CfnEventBus",
-                      "version": "2.84.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_events.EventBus",
-                  "version": "2.84.0"
-                }
-              },
-              "RetrierQueue": {
-                "id": "RetrierQueue",
-                "path": "biruk-notes-API/bus/RetrierQueue",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "biruk-notes-API/bus/RetrierQueue/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::SQS::Queue",
-                      "aws:cdk:cloudformation:props": {
-                        "queueName": "biruk-notes-busRetrier",
-                        "tags": [
-                          {
-                            "key": "sst:app",
-                            "value": "notes"
-                          },
-                          {
-                            "key": "sst:stage",
-                            "value": "biruk"
-                          }
-                        ]
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_sqs.CfnQueue",
-                      "version": "2.84.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_sqs.Queue",
-                  "version": "2.84.0"
-                }
-              },
-              "RetrierFunction": {
-                "id": "RetrierFunction",
-                "path": "biruk-notes-API/bus/RetrierFunction",
-                "children": {
-                  "ServiceRole": {
-                    "id": "ServiceRole",
-                    "path": "biruk-notes-API/bus/RetrierFunction/ServiceRole",
-                    "children": {
-                      "ImportServiceRole": {
-                        "id": "ImportServiceRole",
-                        "path": "biruk-notes-API/bus/RetrierFunction/ServiceRole/ImportServiceRole",
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.Resource",
-                          "version": "2.84.0"
-                        }
-                      },
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "biruk-notes-API/bus/RetrierFunction/ServiceRole/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
-                          "aws:cdk:cloudformation:props": {
-                            "assumeRolePolicyDocument": {
-                              "Statement": [
-                                {
-                                  "Action": "sts:AssumeRole",
-                                  "Effect": "Allow",
-                                  "Principal": {
-                                    "Service": "lambda.amazonaws.com"
-                                  }
-                                }
-                              ],
-                              "Version": "2012-10-17"
-                            },
-                            "managedPolicyArns": [
-                              {
-                                "Fn::Join": [
-                                  "",
-                                  [
-                                    "arn:",
-                                    {
-                                      "Ref": "AWS::Partition"
-                                    },
-                                    ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-                                  ]
-                                ]
-                              }
-                            ],
-                            "tags": [
-                              {
-                                "key": "sst:app",
-                                "value": "notes"
-                              },
-                              {
-                                "key": "sst:stage",
-                                "value": "biruk"
-                              }
-                            ]
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                          "version": "2.84.0"
-                        }
-                      },
-                      "DefaultPolicy": {
-                        "id": "DefaultPolicy",
-                        "path": "biruk-notes-API/bus/RetrierFunction/ServiceRole/DefaultPolicy",
-                        "children": {
-                          "Resource": {
-                            "id": "Resource",
-                            "path": "biruk-notes-API/bus/RetrierFunction/ServiceRole/DefaultPolicy/Resource",
-                            "attributes": {
-                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
-                              "aws:cdk:cloudformation:props": {
-                                "policyDocument": {
-                                  "Statement": [
-                                    {
-                                      "Action": [
-                                        "sqs:ReceiveMessage",
-                                        "sqs:ChangeMessageVisibility",
-                                        "sqs:GetQueueUrl",
-                                        "sqs:DeleteMessage",
-                                        "sqs:GetQueueAttributes"
-                                      ],
-                                      "Effect": "Allow",
-                                      "Resource": {
-                                        "Fn::GetAtt": [
-                                          "busRetrierQueue89364BB5",
-                                          "Arn"
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      "Action": [
-                                        "sqs:SendMessage",
-                                        "sqs:GetQueueAttributes",
-                                        "sqs:GetQueueUrl"
-                                      ],
-                                      "Effect": "Allow",
-                                      "Resource": {
-                                        "Fn::GetAtt": [
-                                          "busRetrierQueue89364BB5",
-                                          "Arn"
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      "Action": "lambda:InvokeFunction",
-                                      "Effect": "Allow",
-                                      "Resource": [
-                                        {
-                                          "Fn::GetAtt": [
-                                            "bustodocreated1F82766D3",
-                                            "Arn"
-                                          ]
-                                        },
-                                        {
-                                          "Fn::Join": [
-                                            "",
-                                            [
-                                              {
-                                                "Fn::GetAtt": [
-                                                  "bustodocreated1F82766D3",
-                                                  "Arn"
-                                                ]
-                                              },
-                                              ":*"
-                                            ]
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ],
-                                  "Version": "2012-10-17"
-                                },
-                                "policyName": "busRetrierFunctionServiceRoleDefaultPolicy1868A7F6",
-                                "roles": [
-                                  {
-                                    "Ref": "busRetrierFunctionServiceRoleCE8B64C2"
-                                  }
-                                ]
-                              }
-                            },
-                            "constructInfo": {
-                              "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
-                              "version": "2.84.0"
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_iam.Policy",
-                          "version": "2.84.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_iam.Role",
-                      "version": "2.84.0"
-                    }
-                  },
-                  "Code": {
-                    "id": "Code",
-                    "path": "biruk-notes-API/bus/RetrierFunction/Code",
-                    "children": {
-                      "Stage": {
-                        "id": "Stage",
-                        "path": "biruk-notes-API/bus/RetrierFunction/Code/Stage",
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.AssetStaging",
-                          "version": "2.84.0"
-                        }
-                      },
-                      "AssetBucket": {
-                        "id": "AssetBucket",
-                        "path": "biruk-notes-API/bus/RetrierFunction/Code/AssetBucket",
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_s3.BucketBase",
-                          "version": "2.84.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
-                      "version": "2.84.0"
-                    }
-                  },
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "biruk-notes-API/bus/RetrierFunction/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
-                      "aws:cdk:cloudformation:props": {
-                        "code": {
-                          "s3Bucket": "cdk-hnb659fds-assets-368794553105-us-east-1",
-                          "s3Key": "c630aa677a71194e5cba3df5e2f77b70db5aa8c727318d1f6b014bda981e35b3.zip"
-                        },
-                        "role": {
-                          "Fn::GetAtt": [
-                            "busRetrierFunctionServiceRoleCE8B64C2",
-                            "Arn"
-                          ]
-                        },
-                        "environment": {
-                          "variables": {
-                            "RETRIER_QUEUE_URL": {
-                              "Ref": "busRetrierQueue89364BB5"
-                            },
-                            "RETRIES": {
-                              "Fn::Join": [
-                                "",
-                                [
-                                  "{\"",
-                                  {
-                                    "Fn::GetAtt": [
-                                      "bustodocreated1F82766D3",
-                                      "Arn"
-                                    ]
-                                  },
-                                  "\":10}"
-                                ]
-                              ]
-                            }
-                          }
-                        },
-                        "functionName": "biruk-notes-busRetrier",
-                        "handler": "index.handler",
-                        "runtime": "nodejs14.x",
-                        "tags": [
-                          {
-                            "key": "sst:app",
-                            "value": "notes"
-                          },
-                          {
-                            "key": "sst:stage",
-                            "value": "biruk"
-                          }
-                        ]
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
-                      "version": "2.84.0"
-                    }
-                  },
-                  "SqsEventSource:biruknotesAPIbusRetrierQueueE8CDCC38": {
-                    "id": "SqsEventSource:biruknotesAPIbusRetrierQueueE8CDCC38",
-                    "path": "biruk-notes-API/bus/RetrierFunction/SqsEventSource:biruknotesAPIbusRetrierQueueE8CDCC38",
-                    "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "biruk-notes-API/bus/RetrierFunction/SqsEventSource:biruknotesAPIbusRetrierQueueE8CDCC38/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::Lambda::EventSourceMapping",
-                          "aws:cdk:cloudformation:props": {
-                            "functionName": {
-                              "Ref": "busRetrierFunctionA625372F"
-                            },
-                            "eventSourceArn": {
-                              "Fn::GetAtt": [
-                                "busRetrierQueue89364BB5",
-                                "Arn"
-                              ]
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_lambda.CfnEventSourceMapping",
-                          "version": "2.84.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_lambda.EventSourceMapping",
-                      "version": "2.84.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_lambda.Function",
-                  "version": "2.84.0"
-                }
-              },
-              "todo_created_1": {
-                "id": "todo_created_1",
-                "path": "biruk-notes-API/bus/todo_created_1",
-                "children": {
-                  "ServiceRole": {
-                    "id": "ServiceRole",
-                    "path": "biruk-notes-API/bus/todo_created_1/ServiceRole",
-                    "children": {
-                      "ImportServiceRole": {
-                        "id": "ImportServiceRole",
-                        "path": "biruk-notes-API/bus/todo_created_1/ServiceRole/ImportServiceRole",
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.Resource",
-                          "version": "2.84.0"
-                        }
-                      },
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "biruk-notes-API/bus/todo_created_1/ServiceRole/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
-                          "aws:cdk:cloudformation:props": {
-                            "assumeRolePolicyDocument": {
-                              "Statement": [
-                                {
-                                  "Action": "sts:AssumeRole",
-                                  "Effect": "Allow",
-                                  "Principal": {
-                                    "Service": "lambda.amazonaws.com"
-                                  }
-                                }
-                              ],
-                              "Version": "2012-10-17"
-                            },
-                            "managedPolicyArns": [
-                              {
-                                "Fn::Join": [
-                                  "",
-                                  [
-                                    "arn:",
-                                    {
-                                      "Ref": "AWS::Partition"
-                                    },
-                                    ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-                                  ]
-                                ]
-                              }
-                            ],
-                            "tags": [
-                              {
-                                "key": "sst:app",
-                                "value": "notes"
-                              },
-                              {
-                                "key": "sst:stage",
-                                "value": "biruk"
-                              }
-                            ]
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                          "version": "2.84.0"
-                        }
-                      },
-                      "DefaultPolicy": {
-                        "id": "DefaultPolicy",
-                        "path": "biruk-notes-API/bus/todo_created_1/ServiceRole/DefaultPolicy",
-                        "children": {
-                          "Resource": {
-                            "id": "Resource",
-                            "path": "biruk-notes-API/bus/todo_created_1/ServiceRole/DefaultPolicy/Resource",
-                            "attributes": {
-                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
-                              "aws:cdk:cloudformation:props": {
-                                "policyDocument": {
-                                  "Statement": [
-                                    {
-                                      "Action": [
-                                        "xray:PutTraceSegments",
-                                        "xray:PutTelemetryRecords"
-                                      ],
-                                      "Effect": "Allow",
-                                      "Resource": "*"
-                                    },
-                                    {
-                                      "Action": [
-                                        "sqs:SendMessage",
-                                        "sqs:GetQueueAttributes",
-                                        "sqs:GetQueueUrl"
-                                      ],
-                                      "Effect": "Allow",
-                                      "Resource": {
-                                        "Fn::GetAtt": [
-                                          "busRetrierQueue89364BB5",
-                                          "Arn"
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      "Action": "iot:*",
-                                      "Effect": "Allow",
-                                      "Resource": "*"
-                                    },
-                                    {
-                                      "Action": "s3:*",
-                                      "Effect": "Allow",
-                                      "Resource": {
-                                        "Fn::Join": [
-                                          "",
-                                          [
-                                            "arn:",
-                                            {
-                                              "Ref": "AWS::Partition"
-                                            },
-                                            ":s3:::sstbootstrap-useast124d14e4b-qr43zsnjbhoq"
-                                          ]
-                                        ]
-                                      }
-                                    }
-                                  ],
-                                  "Version": "2012-10-17"
-                                },
-                                "policyName": "bustodocreated1ServiceRoleDefaultPolicyB19D662B",
-                                "roles": [
-                                  {
-                                    "Ref": "bustodocreated1ServiceRole4C30328F"
-                                  }
-                                ]
-                              }
-                            },
-                            "constructInfo": {
-                              "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
-                              "version": "2.84.0"
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_iam.Policy",
-                          "version": "2.84.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_iam.Role",
-                      "version": "2.84.0"
-                    }
-                  },
-                  "Code": {
-                    "id": "Code",
-                    "path": "biruk-notes-API/bus/todo_created_1/Code",
-                    "children": {
-                      "Stage": {
-                        "id": "Stage",
-                        "path": "biruk-notes-API/bus/todo_created_1/Code/Stage",
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.AssetStaging",
-                          "version": "2.84.0"
-                        }
-                      },
-                      "AssetBucket": {
-                        "id": "AssetBucket",
-                        "path": "biruk-notes-API/bus/todo_created_1/Code/AssetBucket",
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_s3.BucketBase",
-                          "version": "2.84.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
-                      "version": "2.84.0"
-                    }
-                  },
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "biruk-notes-API/bus/todo_created_1/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
-                      "aws:cdk:cloudformation:props": {
-                        "code": {
-                          "s3Bucket": "cdk-hnb659fds-assets-368794553105-us-east-1",
-                          "s3Key": "9fe9969c98dee83cbe72e215307d8491aa401ab9894e93572633e9002918d92c.zip"
-                        },
-                        "role": {
-                          "Fn::GetAtt": [
-                            "bustodocreated1ServiceRole4C30328F",
-                            "Arn"
-                          ]
-                        },
-                        "environment": {
-                          "variables": {
-                            "SST_FUNCTION_ID": "c8136d0e060034152af5e4f8597ce5d493904f17be",
-                            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
-                            "SST_APP": "notes",
-                            "SST_STAGE": "biruk",
-                            "SST_SSM_PREFIX": "/sst/notes/biruk/"
-                          }
-                        },
-                        "ephemeralStorage": {
-                          "size": 512
-                        },
-                        "handler": "bridge.handler",
-                        "memorySize": 1024,
-                        "runtime": "nodejs16.x",
-                        "tags": [
-                          {
-                            "key": "sst:app",
-                            "value": "notes"
-                          },
-                          {
-                            "key": "sst:stage",
-                            "value": "biruk"
-                          }
-                        ],
-                        "timeout": 10,
-                        "tracingConfig": {
-                          "mode": "Active"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
-                      "version": "2.84.0"
-                    }
-                  },
-                  "EventInvokeConfig": {
-                    "id": "EventInvokeConfig",
-                    "path": "biruk-notes-API/bus/todo_created_1/EventInvokeConfig",
-                    "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "biruk-notes-API/bus/todo_created_1/EventInvokeConfig/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::Lambda::EventInvokeConfig",
-                          "aws:cdk:cloudformation:props": {
-                            "functionName": {
-                              "Ref": "bustodocreated1F82766D3"
-                            },
-                            "qualifier": "$LATEST",
-                            "destinationConfig": {
-                              "onFailure": {
-                                "destination": {
-                                  "Fn::GetAtt": [
-                                    "busRetrierQueue89364BB5",
-                                    "Arn"
-                                  ]
-                                }
-                              }
-                            },
-                            "maximumRetryAttempts": 0
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_lambda.CfnEventInvokeConfig",
-                          "version": "2.84.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_lambda.EventInvokeConfig",
-                      "version": "2.84.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_lambda.Function",
-                  "version": "2.84.0"
-                }
-              },
-              "todo_created_1_rule": {
-                "id": "todo_created_1_rule",
-                "path": "biruk-notes-API/bus/todo_created_1_rule",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "biruk-notes-API/bus/todo_created_1_rule/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::Events::Rule",
-                      "aws:cdk:cloudformation:props": {
-                        "eventBusName": {
-                          "Ref": "busEventBus27CE599B"
-                        },
-                        "eventPattern": {
-                          "detail-type": [
-                            "todo.created"
-                          ]
-                        },
-                        "name": "biruk-notes-todo_created_1_rule",
-                        "state": "ENABLED",
-                        "targets": [
-                          {
-                            "id": "Target0",
-                            "arn": {
-                              "Fn::GetAtt": [
-                                "bustodocreated1F82766D3",
-                                "Arn"
-                              ]
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_events.CfnRule",
-                      "version": "2.84.0"
-                    }
-                  },
-                  "AllowEventRulebiruknotesAPIbustodocreated104DE6D7D": {
-                    "id": "AllowEventRulebiruknotesAPIbustodocreated104DE6D7D",
-                    "path": "biruk-notes-API/bus/todo_created_1_rule/AllowEventRulebiruknotesAPIbustodocreated104DE6D7D",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
-                      "aws:cdk:cloudformation:props": {
-                        "action": "lambda:InvokeFunction",
-                        "functionName": {
-                          "Fn::GetAtt": [
-                            "bustodocreated1F82766D3",
-                            "Arn"
-                          ]
-                        },
-                        "principal": "events.amazonaws.com",
-                        "sourceArn": {
-                          "Fn::GetAtt": [
-                            "bustodocreated1rule42B5E680",
-                            "Arn"
-                          ]
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
-                      "version": "2.84.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_events.Rule",
-                  "version": "2.84.0"
-                }
-              },
-              "Parameter_eventBusName": {
-                "id": "Parameter_eventBusName",
-                "path": "biruk-notes-API/bus/Parameter_eventBusName",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "biruk-notes-API/bus/Parameter_eventBusName/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::SSM::Parameter",
-                      "aws:cdk:cloudformation:props": {
-                        "type": "String",
-                        "value": {
-                          "Ref": "busEventBus27CE599B"
-                        },
-                        "name": "/sst/notes/biruk/EventBus/bus/eventBusName",
-                        "tags": {
-                          "sst:app": "notes",
-                          "sst:stage": "biruk"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_ssm.CfnParameter",
-                      "version": "2.84.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_ssm.StringParameter",
-                  "version": "2.84.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "constructs.Construct",
-              "version": "10.1.156"
-            }
-          },
-          "api": {
-            "id": "api",
-            "path": "biruk-notes-API/api",
-            "children": {
-              "Api": {
-                "id": "Api",
-                "path": "biruk-notes-API/api/Api",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "biruk-notes-API/api/Api/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Api",
+                      "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
                       "aws:cdk:cloudformation:props": {
                         "corsConfiguration": {
-                          "allowCredentials": false,
-                          "allowHeaders": [
-                            "*"
-                          ],
-                          "allowMethods": [
-                            "*"
-                          ],
-                          "allowOrigins": [
-                            "*"
-                          ]
-                        },
-                        "name": "biruk-notes-api",
-                        "protocolType": "HTTP",
-                        "tags": {
-                          "sst:app": "notes",
-                          "sst:stage": "biruk"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_apigatewayv2.CfnApi",
-                      "version": "2.84.0"
-                    }
-                  },
-                  "DefaultStage": {
-                    "id": "DefaultStage",
-                    "path": "biruk-notes-API/api/Api/DefaultStage",
-                    "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "biruk-notes-API/api/Api/DefaultStage/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Stage",
-                          "aws:cdk:cloudformation:props": {
-                            "apiId": {
-                              "Ref": "apiApiC3C473D0"
-                            },
-                            "stageName": "$default",
-                            "accessLogSettings": {
-                              "format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"httpMethod\":\"$context.httpMethod\",\"path\":\"$context.path\",\"routeKey\":\"$context.routeKey\",\"status\":$context.status,\"responseLatency\":$context.responseLatency,\"integrationRequestId\":\"$context.integration.requestId\",\"integrationStatus\":\"$context.integration.status\",\"integrationLatency\":\"$context.integration.latency\",\"integrationServiceStatus\":\"$context.integration.integrationStatus\",\"ip\":\"$context.identity.sourceIp\",\"userAgent\":\"$context.identity.userAgent\"}",
-                              "destinationArn": {
-                                "Fn::GetAtt": [
-                                  "apiLogGroup924E5B7A",
-                                  "Arn"
-                                ]
-                              }
-                            },
-                            "autoDeploy": true,
-                            "tags": {
-                              "sst:app": "notes",
-                              "sst:stage": "biruk"
+                          "corsRules": [
+                            {
+                              "allowedHeaders": [
+                                "*"
+                              ],
+                              "allowedMethods": [
+                                "GET",
+                                "PUT",
+                                "HEAD",
+                                "POST",
+                                "DELETE"
+                              ],
+                              "allowedOrigins": [
+                                "*"
+                              ]
                             }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_apigatewayv2.CfnStage",
-                          "version": "2.84.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-apigatewayv2-alpha.HttpStage",
-                      "version": "2.84.0-alpha.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-apigatewayv2-alpha.HttpApi",
-                  "version": "2.84.0-alpha.0"
-                }
-              },
-              "LogGroup": {
-                "id": "LogGroup",
-                "path": "biruk-notes-API/api/LogGroup",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "biruk-notes-API/api/LogGroup/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
-                      "aws:cdk:cloudformation:props": {
-                        "logGroupName": {
-                          "Fn::Join": [
-                            "",
-                            [
-                              "/aws/vendedlogs/apis/biruk-notes-api-",
-                              {
-                                "Ref": "apiApiC3C473D0"
-                              },
-                              "/default"
-                            ]
                           ]
+                        },
+                        "ownershipControls": {
+                          "rules": [
+                            {
+                              "objectOwnership": "BucketOwnerPreferred"
+                            }
+                          ]
+                        },
+                        "publicAccessBlockConfiguration": {
+                          "blockPublicAcls": false,
+                          "ignorePublicAcls": false
                         },
                         "tags": [
                           {
@@ -993,774 +205,31 @@
                       }
                     },
                     "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_logs.CfnLogGroup",
+                      "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
                       "version": "2.84.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_logs.LogGroup",
+                  "fqn": "aws-cdk-lib.aws_s3.Bucket",
                   "version": "2.84.0"
                 }
               },
-              "Lambda_GET_--": {
-                "id": "Lambda_GET_--",
-                "path": "biruk-notes-API/api/Lambda_GET_--",
-                "children": {
-                  "ServiceRole": {
-                    "id": "ServiceRole",
-                    "path": "biruk-notes-API/api/Lambda_GET_--/ServiceRole",
-                    "children": {
-                      "ImportServiceRole": {
-                        "id": "ImportServiceRole",
-                        "path": "biruk-notes-API/api/Lambda_GET_--/ServiceRole/ImportServiceRole",
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.Resource",
-                          "version": "2.84.0"
-                        }
-                      },
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "biruk-notes-API/api/Lambda_GET_--/ServiceRole/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
-                          "aws:cdk:cloudformation:props": {
-                            "assumeRolePolicyDocument": {
-                              "Statement": [
-                                {
-                                  "Action": "sts:AssumeRole",
-                                  "Effect": "Allow",
-                                  "Principal": {
-                                    "Service": "lambda.amazonaws.com"
-                                  }
-                                }
-                              ],
-                              "Version": "2012-10-17"
-                            },
-                            "managedPolicyArns": [
-                              {
-                                "Fn::Join": [
-                                  "",
-                                  [
-                                    "arn:",
-                                    {
-                                      "Ref": "AWS::Partition"
-                                    },
-                                    ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-                                  ]
-                                ]
-                              }
-                            ],
-                            "tags": [
-                              {
-                                "key": "sst:app",
-                                "value": "notes"
-                              },
-                              {
-                                "key": "sst:stage",
-                                "value": "biruk"
-                              }
-                            ]
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                          "version": "2.84.0"
-                        }
-                      },
-                      "DefaultPolicy": {
-                        "id": "DefaultPolicy",
-                        "path": "biruk-notes-API/api/Lambda_GET_--/ServiceRole/DefaultPolicy",
-                        "children": {
-                          "Resource": {
-                            "id": "Resource",
-                            "path": "biruk-notes-API/api/Lambda_GET_--/ServiceRole/DefaultPolicy/Resource",
-                            "attributes": {
-                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
-                              "aws:cdk:cloudformation:props": {
-                                "policyDocument": {
-                                  "Statement": [
-                                    {
-                                      "Action": [
-                                        "xray:PutTraceSegments",
-                                        "xray:PutTelemetryRecords"
-                                      ],
-                                      "Effect": "Allow",
-                                      "Resource": "*"
-                                    },
-                                    {
-                                      "Action": "events:*",
-                                      "Effect": "Allow",
-                                      "Resource": {
-                                        "Fn::GetAtt": [
-                                          "busEventBus27CE599B",
-                                          "Arn"
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      "Action": "iot:*",
-                                      "Effect": "Allow",
-                                      "Resource": "*"
-                                    },
-                                    {
-                                      "Action": "s3:*",
-                                      "Effect": "Allow",
-                                      "Resource": {
-                                        "Fn::Join": [
-                                          "",
-                                          [
-                                            "arn:",
-                                            {
-                                              "Ref": "AWS::Partition"
-                                            },
-                                            ":s3:::sstbootstrap-useast124d14e4b-qr43zsnjbhoq"
-                                          ]
-                                        ]
-                                      }
-                                    }
-                                  ],
-                                  "Version": "2012-10-17"
-                                },
-                                "policyName": "apiLambdaGETServiceRoleDefaultPolicyE9384899",
-                                "roles": [
-                                  {
-                                    "Ref": "apiLambdaGETServiceRole57A117D1"
-                                  }
-                                ]
-                              }
-                            },
-                            "constructInfo": {
-                              "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
-                              "version": "2.84.0"
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_iam.Policy",
-                          "version": "2.84.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_iam.Role",
-                      "version": "2.84.0"
-                    }
-                  },
-                  "Code": {
-                    "id": "Code",
-                    "path": "biruk-notes-API/api/Lambda_GET_--/Code",
-                    "children": {
-                      "Stage": {
-                        "id": "Stage",
-                        "path": "biruk-notes-API/api/Lambda_GET_--/Code/Stage",
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.AssetStaging",
-                          "version": "2.84.0"
-                        }
-                      },
-                      "AssetBucket": {
-                        "id": "AssetBucket",
-                        "path": "biruk-notes-API/api/Lambda_GET_--/Code/AssetBucket",
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_s3.BucketBase",
-                          "version": "2.84.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
-                      "version": "2.84.0"
-                    }
-                  },
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "biruk-notes-API/api/Lambda_GET_--/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
-                      "aws:cdk:cloudformation:props": {
-                        "code": {
-                          "s3Bucket": "cdk-hnb659fds-assets-368794553105-us-east-1",
-                          "s3Key": "9fe9969c98dee83cbe72e215307d8491aa401ab9894e93572633e9002918d92c.zip"
-                        },
-                        "role": {
-                          "Fn::GetAtt": [
-                            "apiLambdaGETServiceRole57A117D1",
-                            "Arn"
-                          ]
-                        },
-                        "environment": {
-                          "variables": {
-                            "SST_FUNCTION_ID": "c8d29ba7e3db1c0788b3e7ffeca3d22dea502ad317",
-                            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
-                            "SST_APP": "notes",
-                            "SST_STAGE": "biruk",
-                            "SST_SSM_PREFIX": "/sst/notes/biruk/",
-                            "SST_EventBus_eventBusName_bus": {
-                              "Ref": "busEventBus27CE599B"
-                            },
-                            "SST_DEBUG_IS_API_ROUTE": "1"
-                          }
-                        },
-                        "ephemeralStorage": {
-                          "size": 512
-                        },
-                        "handler": "bridge.handler",
-                        "memorySize": 1024,
-                        "runtime": "nodejs16.x",
-                        "tags": [
-                          {
-                            "key": "sst:app",
-                            "value": "notes"
-                          },
-                          {
-                            "key": "sst:stage",
-                            "value": "biruk"
-                          }
-                        ],
-                        "timeout": 10,
-                        "tracingConfig": {
-                          "mode": "Active"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
-                      "version": "2.84.0"
-                    }
-                  },
-                  "EventInvokeConfig": {
-                    "id": "EventInvokeConfig",
-                    "path": "biruk-notes-API/api/Lambda_GET_--/EventInvokeConfig",
-                    "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "biruk-notes-API/api/Lambda_GET_--/EventInvokeConfig/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::Lambda::EventInvokeConfig",
-                          "aws:cdk:cloudformation:props": {
-                            "functionName": {
-                              "Ref": "apiLambdaGET2D5CB7A7"
-                            },
-                            "qualifier": "$LATEST",
-                            "maximumRetryAttempts": 0
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_lambda.CfnEventInvokeConfig",
-                          "version": "2.84.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_lambda.EventInvokeConfig",
-                      "version": "2.84.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_lambda.Function",
-                  "version": "2.84.0"
-                }
-              },
-              "Route_GET_--": {
-                "id": "Route_GET_--",
-                "path": "biruk-notes-API/api/Route_GET_--",
-                "children": {
-                  "Integration_GET_--": {
-                    "id": "Integration_GET_--",
-                    "path": "biruk-notes-API/api/Route_GET_--/Integration_GET_--",
-                    "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "biruk-notes-API/api/Route_GET_--/Integration_GET_--/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Integration",
-                          "aws:cdk:cloudformation:props": {
-                            "apiId": {
-                              "Ref": "apiApiC3C473D0"
-                            },
-                            "integrationType": "AWS_PROXY",
-                            "integrationUri": {
-                              "Fn::GetAtt": [
-                                "apiLambdaGET2D5CB7A7",
-                                "Arn"
-                              ]
-                            },
-                            "payloadFormatVersion": "2.0"
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_apigatewayv2.CfnIntegration",
-                          "version": "2.84.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-apigatewayv2-alpha.HttpIntegration",
-                      "version": "2.84.0-alpha.0"
-                    }
-                  },
-                  "Integration_GET_---Permission": {
-                    "id": "Integration_GET_---Permission",
-                    "path": "biruk-notes-API/api/Route_GET_--/Integration_GET_---Permission",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
-                      "aws:cdk:cloudformation:props": {
-                        "action": "lambda:InvokeFunction",
-                        "functionName": {
-                          "Fn::GetAtt": [
-                            "apiLambdaGET2D5CB7A7",
-                            "Arn"
-                          ]
-                        },
-                        "principal": "apigateway.amazonaws.com",
-                        "sourceArn": {
-                          "Fn::Join": [
-                            "",
-                            [
-                              "arn:",
-                              {
-                                "Ref": "AWS::Partition"
-                              },
-                              ":execute-api:us-east-1:368794553105:",
-                              {
-                                "Ref": "apiApiC3C473D0"
-                              },
-                              "/*/*/"
-                            ]
-                          ]
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
-                      "version": "2.84.0"
-                    }
-                  },
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "biruk-notes-API/api/Route_GET_--/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Route",
-                      "aws:cdk:cloudformation:props": {
-                        "apiId": {
-                          "Ref": "apiApiC3C473D0"
-                        },
-                        "routeKey": "GET /",
-                        "authorizationType": "NONE",
-                        "target": {
-                          "Fn::Join": [
-                            "",
-                            [
-                              "integrations/",
-                              {
-                                "Ref": "apiRouteGETIntegrationGET451F73F0"
-                              }
-                            ]
-                          ]
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_apigatewayv2.CfnRoute",
-                      "version": "2.84.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-apigatewayv2-alpha.HttpRoute",
-                  "version": "2.84.0-alpha.0"
-                }
-              },
-              "Lambda_POST_--": {
-                "id": "Lambda_POST_--",
-                "path": "biruk-notes-API/api/Lambda_POST_--",
-                "children": {
-                  "ServiceRole": {
-                    "id": "ServiceRole",
-                    "path": "biruk-notes-API/api/Lambda_POST_--/ServiceRole",
-                    "children": {
-                      "ImportServiceRole": {
-                        "id": "ImportServiceRole",
-                        "path": "biruk-notes-API/api/Lambda_POST_--/ServiceRole/ImportServiceRole",
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.Resource",
-                          "version": "2.84.0"
-                        }
-                      },
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "biruk-notes-API/api/Lambda_POST_--/ServiceRole/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
-                          "aws:cdk:cloudformation:props": {
-                            "assumeRolePolicyDocument": {
-                              "Statement": [
-                                {
-                                  "Action": "sts:AssumeRole",
-                                  "Effect": "Allow",
-                                  "Principal": {
-                                    "Service": "lambda.amazonaws.com"
-                                  }
-                                }
-                              ],
-                              "Version": "2012-10-17"
-                            },
-                            "managedPolicyArns": [
-                              {
-                                "Fn::Join": [
-                                  "",
-                                  [
-                                    "arn:",
-                                    {
-                                      "Ref": "AWS::Partition"
-                                    },
-                                    ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-                                  ]
-                                ]
-                              }
-                            ],
-                            "tags": [
-                              {
-                                "key": "sst:app",
-                                "value": "notes"
-                              },
-                              {
-                                "key": "sst:stage",
-                                "value": "biruk"
-                              }
-                            ]
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                          "version": "2.84.0"
-                        }
-                      },
-                      "DefaultPolicy": {
-                        "id": "DefaultPolicy",
-                        "path": "biruk-notes-API/api/Lambda_POST_--/ServiceRole/DefaultPolicy",
-                        "children": {
-                          "Resource": {
-                            "id": "Resource",
-                            "path": "biruk-notes-API/api/Lambda_POST_--/ServiceRole/DefaultPolicy/Resource",
-                            "attributes": {
-                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
-                              "aws:cdk:cloudformation:props": {
-                                "policyDocument": {
-                                  "Statement": [
-                                    {
-                                      "Action": [
-                                        "xray:PutTraceSegments",
-                                        "xray:PutTelemetryRecords"
-                                      ],
-                                      "Effect": "Allow",
-                                      "Resource": "*"
-                                    },
-                                    {
-                                      "Action": "events:*",
-                                      "Effect": "Allow",
-                                      "Resource": {
-                                        "Fn::GetAtt": [
-                                          "busEventBus27CE599B",
-                                          "Arn"
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      "Action": "iot:*",
-                                      "Effect": "Allow",
-                                      "Resource": "*"
-                                    },
-                                    {
-                                      "Action": "s3:*",
-                                      "Effect": "Allow",
-                                      "Resource": {
-                                        "Fn::Join": [
-                                          "",
-                                          [
-                                            "arn:",
-                                            {
-                                              "Ref": "AWS::Partition"
-                                            },
-                                            ":s3:::sstbootstrap-useast124d14e4b-qr43zsnjbhoq"
-                                          ]
-                                        ]
-                                      }
-                                    }
-                                  ],
-                                  "Version": "2012-10-17"
-                                },
-                                "policyName": "apiLambdaPOSTServiceRoleDefaultPolicyC111F047",
-                                "roles": [
-                                  {
-                                    "Ref": "apiLambdaPOSTServiceRoleA4C27F91"
-                                  }
-                                ]
-                              }
-                            },
-                            "constructInfo": {
-                              "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
-                              "version": "2.84.0"
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_iam.Policy",
-                          "version": "2.84.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_iam.Role",
-                      "version": "2.84.0"
-                    }
-                  },
-                  "Code": {
-                    "id": "Code",
-                    "path": "biruk-notes-API/api/Lambda_POST_--/Code",
-                    "children": {
-                      "Stage": {
-                        "id": "Stage",
-                        "path": "biruk-notes-API/api/Lambda_POST_--/Code/Stage",
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.AssetStaging",
-                          "version": "2.84.0"
-                        }
-                      },
-                      "AssetBucket": {
-                        "id": "AssetBucket",
-                        "path": "biruk-notes-API/api/Lambda_POST_--/Code/AssetBucket",
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_s3.BucketBase",
-                          "version": "2.84.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
-                      "version": "2.84.0"
-                    }
-                  },
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "biruk-notes-API/api/Lambda_POST_--/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
-                      "aws:cdk:cloudformation:props": {
-                        "code": {
-                          "s3Bucket": "cdk-hnb659fds-assets-368794553105-us-east-1",
-                          "s3Key": "9fe9969c98dee83cbe72e215307d8491aa401ab9894e93572633e9002918d92c.zip"
-                        },
-                        "role": {
-                          "Fn::GetAtt": [
-                            "apiLambdaPOSTServiceRoleA4C27F91",
-                            "Arn"
-                          ]
-                        },
-                        "environment": {
-                          "variables": {
-                            "SST_FUNCTION_ID": "c87f85fe7ef382deec893fa35beebbd581e5c92916",
-                            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
-                            "SST_APP": "notes",
-                            "SST_STAGE": "biruk",
-                            "SST_SSM_PREFIX": "/sst/notes/biruk/",
-                            "SST_EventBus_eventBusName_bus": {
-                              "Ref": "busEventBus27CE599B"
-                            },
-                            "SST_DEBUG_IS_API_ROUTE": "1"
-                          }
-                        },
-                        "ephemeralStorage": {
-                          "size": 512
-                        },
-                        "handler": "bridge.handler",
-                        "memorySize": 1024,
-                        "runtime": "nodejs16.x",
-                        "tags": [
-                          {
-                            "key": "sst:app",
-                            "value": "notes"
-                          },
-                          {
-                            "key": "sst:stage",
-                            "value": "biruk"
-                          }
-                        ],
-                        "timeout": 10,
-                        "tracingConfig": {
-                          "mode": "Active"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
-                      "version": "2.84.0"
-                    }
-                  },
-                  "EventInvokeConfig": {
-                    "id": "EventInvokeConfig",
-                    "path": "biruk-notes-API/api/Lambda_POST_--/EventInvokeConfig",
-                    "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "biruk-notes-API/api/Lambda_POST_--/EventInvokeConfig/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::Lambda::EventInvokeConfig",
-                          "aws:cdk:cloudformation:props": {
-                            "functionName": {
-                              "Ref": "apiLambdaPOSTAADD50C4"
-                            },
-                            "qualifier": "$LATEST",
-                            "maximumRetryAttempts": 0
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_lambda.CfnEventInvokeConfig",
-                          "version": "2.84.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_lambda.EventInvokeConfig",
-                      "version": "2.84.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_lambda.Function",
-                  "version": "2.84.0"
-                }
-              },
-              "Route_POST_--": {
-                "id": "Route_POST_--",
-                "path": "biruk-notes-API/api/Route_POST_--",
-                "children": {
-                  "Integration_POST_--": {
-                    "id": "Integration_POST_--",
-                    "path": "biruk-notes-API/api/Route_POST_--/Integration_POST_--",
-                    "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "biruk-notes-API/api/Route_POST_--/Integration_POST_--/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Integration",
-                          "aws:cdk:cloudformation:props": {
-                            "apiId": {
-                              "Ref": "apiApiC3C473D0"
-                            },
-                            "integrationType": "AWS_PROXY",
-                            "integrationUri": {
-                              "Fn::GetAtt": [
-                                "apiLambdaPOSTAADD50C4",
-                                "Arn"
-                              ]
-                            },
-                            "payloadFormatVersion": "2.0"
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_apigatewayv2.CfnIntegration",
-                          "version": "2.84.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-apigatewayv2-alpha.HttpIntegration",
-                      "version": "2.84.0-alpha.0"
-                    }
-                  },
-                  "Integration_POST_---Permission": {
-                    "id": "Integration_POST_---Permission",
-                    "path": "biruk-notes-API/api/Route_POST_--/Integration_POST_---Permission",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
-                      "aws:cdk:cloudformation:props": {
-                        "action": "lambda:InvokeFunction",
-                        "functionName": {
-                          "Fn::GetAtt": [
-                            "apiLambdaPOSTAADD50C4",
-                            "Arn"
-                          ]
-                        },
-                        "principal": "apigateway.amazonaws.com",
-                        "sourceArn": {
-                          "Fn::Join": [
-                            "",
-                            [
-                              "arn:",
-                              {
-                                "Ref": "AWS::Partition"
-                              },
-                              ":execute-api:us-east-1:368794553105:",
-                              {
-                                "Ref": "apiApiC3C473D0"
-                              },
-                              "/*/*/"
-                            ]
-                          ]
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
-                      "version": "2.84.0"
-                    }
-                  },
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "biruk-notes-API/api/Route_POST_--/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Route",
-                      "aws:cdk:cloudformation:props": {
-                        "apiId": {
-                          "Ref": "apiApiC3C473D0"
-                        },
-                        "routeKey": "POST /",
-                        "authorizationType": "NONE",
-                        "target": {
-                          "Fn::Join": [
-                            "",
-                            [
-                              "integrations/",
-                              {
-                                "Ref": "apiRoutePOSTIntegrationPOST2681706C"
-                              }
-                            ]
-                          ]
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_apigatewayv2.CfnRoute",
-                      "version": "2.84.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-apigatewayv2-alpha.HttpRoute",
-                  "version": "2.84.0-alpha.0"
-                }
-              },
-              "Parameter_url": {
-                "id": "Parameter_url",
-                "path": "biruk-notes-API/api/Parameter_url",
+              "Parameter_bucketName": {
+                "id": "Parameter_bucketName",
+                "path": "biruk-notes-StorageStack/Uploads/Parameter_bucketName",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "biruk-notes-API/api/Parameter_url/Resource",
+                    "path": "biruk-notes-StorageStack/Uploads/Parameter_bucketName/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::SSM::Parameter",
                       "aws:cdk:cloudformation:props": {
                         "type": "String",
                         "value": {
-                          "Fn::GetAtt": [
-                            "apiApiC3C473D0",
-                            "ApiEndpoint"
-                          ]
+                          "Ref": "UploadsBucketC4B27CC7"
                         },
-                        "name": "/sst/notes/biruk/Api/api/url",
+                        "name": "/sst/notes/biruk/Bucket/Uploads/bucketName",
                         "tags": {
                           "sst:app": "notes",
                           "sst:stage": "biruk"
@@ -1784,17 +253,117 @@
               "version": "10.1.156"
             }
           },
-          "SSTStackOutputApiEndpoint": {
-            "id": "SSTStackOutputApiEndpoint",
-            "path": "biruk-notes-API/SSTStackOutputApiEndpoint",
+          "Notes": {
+            "id": "Notes",
+            "path": "biruk-notes-StorageStack/Notes",
+            "children": {
+              "Table": {
+                "id": "Table",
+                "path": "biruk-notes-StorageStack/Notes/Table",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "biruk-notes-StorageStack/Notes/Table/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                      "aws:cdk:cloudformation:props": {
+                        "keySchema": [
+                          {
+                            "attributeName": "userId",
+                            "keyType": "HASH"
+                          },
+                          {
+                            "attributeName": "noteId",
+                            "keyType": "RANGE"
+                          }
+                        ],
+                        "attributeDefinitions": [
+                          {
+                            "attributeName": "userId",
+                            "attributeType": "S"
+                          },
+                          {
+                            "attributeName": "noteId",
+                            "attributeType": "S"
+                          }
+                        ],
+                        "billingMode": "PAY_PER_REQUEST",
+                        "pointInTimeRecoverySpecification": {
+                          "pointInTimeRecoveryEnabled": true
+                        },
+                        "tableName": "biruk-notes-Notes",
+                        "tags": [
+                          {
+                            "key": "sst:app",
+                            "value": "notes"
+                          },
+                          {
+                            "key": "sst:stage",
+                            "value": "biruk"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_dynamodb.CfnTable",
+                      "version": "2.84.0"
+                    }
+                  },
+                  "ScalingRole": {
+                    "id": "ScalingRole",
+                    "path": "biruk-notes-StorageStack/Notes/Table/ScalingRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.84.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_dynamodb.Table",
+                  "version": "2.84.0"
+                }
+              },
+              "Parameter_tableName": {
+                "id": "Parameter_tableName",
+                "path": "biruk-notes-StorageStack/Notes/Parameter_tableName",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "biruk-notes-StorageStack/Notes/Parameter_tableName/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SSM::Parameter",
+                      "aws:cdk:cloudformation:props": {
+                        "type": "String",
+                        "value": {
+                          "Ref": "NotesTable7100B0E8"
+                        },
+                        "name": "/sst/notes/biruk/Table/Notes/tableName",
+                        "tags": {
+                          "sst:app": "notes",
+                          "sst:stage": "biruk"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ssm.CfnParameter",
+                      "version": "2.84.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ssm.StringParameter",
+                  "version": "2.84.0"
+                }
+              }
+            },
             "constructInfo": {
-              "fqn": "aws-cdk-lib.CfnOutput",
-              "version": "2.84.0"
+              "fqn": "constructs.Construct",
+              "version": "10.1.156"
             }
           },
           "SSTStackOutputSSTMetadata": {
             "id": "SSTStackOutputSSTMetadata",
-            "path": "biruk-notes-API/SSTStackOutputSSTMetadata",
+            "path": "biruk-notes-StorageStack/SSTStackOutputSSTMetadata",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnOutput",
               "version": "2.84.0"
@@ -1802,7 +371,7 @@
           },
           "BootstrapVersion": {
             "id": "BootstrapVersion",
-            "path": "biruk-notes-API/BootstrapVersion",
+            "path": "biruk-notes-StorageStack/BootstrapVersion",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.84.0"
@@ -1810,7 +379,7 @@
           },
           "CheckBootstrapVersion": {
             "id": "CheckBootstrapVersion",
-            "path": "biruk-notes-API/CheckBootstrapVersion",
+            "path": "biruk-notes-StorageStack/CheckBootstrapVersion",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnRule",
               "version": "2.84.0"

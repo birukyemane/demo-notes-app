@@ -345,27 +345,6 @@
          "Arn"
         ]
        }
-      },
-      {
-       "Action": "iot:*",
-       "Effect": "Allow",
-       "Resource": "*"
-      },
-      {
-       "Action": "s3:*",
-       "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          "arn:",
-          {
-           "Ref": "AWS::Partition"
-          },
-          ":s3:::sstbootstrap-useast124d14e4b-qr43zsnjbhoq"
-         ]
-        ]
-       }
       }
      ],
      "Version": "2012-10-17"
@@ -382,8 +361,7 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": "cdk-hnb659fds-assets-368794553105-us-east-1",
-     "S3Key": "9fe9969c98dee83cbe72e215307d8491aa401ab9894e93572633e9002918d92c.zip"
+     "ZipFile": "export function placeholder() {}"
     },
     "Role": {
      "Fn::GetAtt": [
@@ -393,7 +371,6 @@
     },
     "Environment": {
      "Variables": {
-      "SST_FUNCTION_ID": "c8136d0e060034152af5e4f8597ce5d493904f17be",
       "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
       "SST_APP": "notes",
       "SST_STAGE": "biruk",
@@ -403,7 +380,7 @@
     "EphemeralStorage": {
      "Size": 512
     },
-    "Handler": "bridge.handler",
+    "Handler": "index.placeholder",
     "MemorySize": 1024,
     "Runtime": "nodejs16.x",
     "Tags": [
@@ -442,8 +419,7 @@
        ]
       }
      }
-    },
-    "MaximumRetryAttempts": 0
+    }
    }
   },
   "bustodocreated1rule42B5E680": {
@@ -643,27 +619,6 @@
          "Arn"
         ]
        }
-      },
-      {
-       "Action": "iot:*",
-       "Effect": "Allow",
-       "Resource": "*"
-      },
-      {
-       "Action": "s3:*",
-       "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          "arn:",
-          {
-           "Ref": "AWS::Partition"
-          },
-          ":s3:::sstbootstrap-useast124d14e4b-qr43zsnjbhoq"
-         ]
-        ]
-       }
       }
      ],
      "Version": "2012-10-17"
@@ -680,8 +635,7 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": "cdk-hnb659fds-assets-368794553105-us-east-1",
-     "S3Key": "9fe9969c98dee83cbe72e215307d8491aa401ab9894e93572633e9002918d92c.zip"
+     "ZipFile": "export function placeholder() {}"
     },
     "Role": {
      "Fn::GetAtt": [
@@ -691,21 +645,19 @@
     },
     "Environment": {
      "Variables": {
-      "SST_FUNCTION_ID": "c8d29ba7e3db1c0788b3e7ffeca3d22dea502ad317",
       "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
       "SST_APP": "notes",
       "SST_STAGE": "biruk",
       "SST_SSM_PREFIX": "/sst/notes/biruk/",
       "SST_EventBus_eventBusName_bus": {
        "Ref": "busEventBus27CE599B"
-      },
-      "SST_DEBUG_IS_API_ROUTE": "1"
+      }
      }
     },
     "EphemeralStorage": {
      "Size": 512
     },
-    "Handler": "bridge.handler",
+    "Handler": "index.placeholder",
     "MemorySize": 1024,
     "Runtime": "nodejs16.x",
     "Tags": [
@@ -727,16 +679,6 @@
     "apiLambdaGETServiceRoleDefaultPolicyE9384899",
     "apiLambdaGETServiceRole57A117D1"
    ]
-  },
-  "apiLambdaGETEventInvokeConfig794FB4BC": {
-   "Type": "AWS::Lambda::EventInvokeConfig",
-   "Properties": {
-    "FunctionName": {
-     "Ref": "apiLambdaGET2D5CB7A7"
-    },
-    "Qualifier": "$LATEST",
-    "MaximumRetryAttempts": 0
-   }
   },
   "apiRouteGETIntegrationGET451F73F0": {
    "Type": "AWS::ApiGatewayV2::Integration",
@@ -867,27 +809,6 @@
          "Arn"
         ]
        }
-      },
-      {
-       "Action": "iot:*",
-       "Effect": "Allow",
-       "Resource": "*"
-      },
-      {
-       "Action": "s3:*",
-       "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          "arn:",
-          {
-           "Ref": "AWS::Partition"
-          },
-          ":s3:::sstbootstrap-useast124d14e4b-qr43zsnjbhoq"
-         ]
-        ]
-       }
       }
      ],
      "Version": "2012-10-17"
@@ -904,8 +825,7 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": "cdk-hnb659fds-assets-368794553105-us-east-1",
-     "S3Key": "9fe9969c98dee83cbe72e215307d8491aa401ab9894e93572633e9002918d92c.zip"
+     "ZipFile": "export function placeholder() {}"
     },
     "Role": {
      "Fn::GetAtt": [
@@ -915,21 +835,19 @@
     },
     "Environment": {
      "Variables": {
-      "SST_FUNCTION_ID": "c87f85fe7ef382deec893fa35beebbd581e5c92916",
       "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
       "SST_APP": "notes",
       "SST_STAGE": "biruk",
       "SST_SSM_PREFIX": "/sst/notes/biruk/",
       "SST_EventBus_eventBusName_bus": {
        "Ref": "busEventBus27CE599B"
-      },
-      "SST_DEBUG_IS_API_ROUTE": "1"
+      }
      }
     },
     "EphemeralStorage": {
      "Size": 512
     },
-    "Handler": "bridge.handler",
+    "Handler": "index.placeholder",
     "MemorySize": 1024,
     "Runtime": "nodejs16.x",
     "Tags": [
@@ -951,16 +869,6 @@
     "apiLambdaPOSTServiceRoleDefaultPolicyC111F047",
     "apiLambdaPOSTServiceRoleA4C27F91"
    ]
-  },
-  "apiLambdaPOSTEventInvokeConfig41B27DD2": {
-   "Type": "AWS::Lambda::EventInvokeConfig",
-   "Properties": {
-    "FunctionName": {
-     "Ref": "apiLambdaPOSTAADD50C4"
-    },
-    "Qualifier": "$LATEST",
-    "MaximumRetryAttempts": 0
-   }
   },
   "apiRoutePOSTIntegrationPOST2681706C": {
    "Type": "AWS::ApiGatewayV2::Integration",
